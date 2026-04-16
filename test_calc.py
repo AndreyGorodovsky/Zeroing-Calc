@@ -31,7 +31,7 @@ pixels_to_clicks                       = mod.pixels_to_clicks
 _format_clicks                         = mod._format_clicks
 ZeroingSession                         = mod.ZeroingSession
 
-BASE = "C:/Users/Andrey/desktop/calc/"
+BASE = "C:/Users/Andrey/desktop/calc/images/"
 
 # == tiny test harness =========================================================
 passed = 0

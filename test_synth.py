@@ -25,7 +25,7 @@ _register_to        = mod._register_to
 _to_gray_norm       = mod._to_gray_norm
 find_diamond_center = mod.find_diamond_center
 
-SYNTH = "C:/Users/Andrey/desktop/calc/synth/"
+SYNTH = "C:/Users/Andrey/desktop/calc/images/synth/"
 CX, CY = 450, 600   # diamond centre in synthetic images
 
 passed = failed = 0
