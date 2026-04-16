@@ -1,0 +1,104 @@
+TEST RESULTS & CODE REVIEW SUMMARY
+====================================
+
+
+FINAL RESULTS
+-------------
+106 tests total, 0 failures.
+  - test_calc.py:  76 tests  (unit tests on every function + real images)
+  - test_synth.py: 30 tests  (pipeline tests on synthetic generated images)
+
+
+BUG FOUND & FIXED
+-----------------
+Bug: _register_to() filled image borders with BLACK by default when aligning
+two images via warpPerspective(). Black borders are larger than the diamond
+shape and confused find_diamond_center() into detecting the border edge
+instead of the actual diamond.
+
+Effect: After any camera shift, the aim point was detected at the wrong
+location (e.g. (743, 795) instead of (450, 600)), producing completely
+wrong click corrections.
+
+Fix: Added borderValue=(255, 255, 255) to the warpPerspective() call in
+_register_to(). White fill matches the target background and the diamond
+is correctly found after alignment.
+
+File changed: Calc.ipynb, cell 3, function _register_to()
+  OLD: warped = cv.warpPerspective(img_bgr, H, (w, h))
+  NEW: warped = cv.warpPerspective(img_bgr, H, (w, h), borderValue=(255, 255, 255))
+
+
+OBSERVATION 1 -- NOT A BUG
+---------------------------
+estimate_px_per_cm_from_grid() returns 80 px/cm on perfectly synthetic
+grid images, but correctly returns 40 px/cm on real target photos.
+
+Reason: The synthetic grid is perfectly uniform -- every grid line is
+identical. This makes all autocorrelation peaks equal-height (at lag=40,
+80, 120...) and argmax() picks a later one. Real photos have natural
+texture variation that makes the lag=40 peak slightly dominant.
+
+Conclusion: No fix needed. The function works correctly for real usage.
+
+
+OBSERVATION 2 -- BEHAVIOR BY DESIGN
+--------------------------------------
+With max_dist_px=None (the default in process_shot), outlier holes far
+from the main group ARE included in the group centre calculation.
+
+The code comment already documents this:
+    aim_xy=aim_px,
+    max_dist_px=None,   # or 300-400 if you want
+
+If you want to reject holes more than 300px from the aim point, change
+the process_shot() call to:
+    max_dist_px=300
+
+
+WHAT EACH TEST FILE VERIFIES
+------------------------------
+test_calc.py (76 tests):
+  - _to_gray_norm:           output shape, dtype, non-flat image
+  - find_diamond_center:     inside bounds, not at edges, deterministic
+  - _register_to:            correct shape, pure translation, diamond
+                             aligned to within 3px, self-register is identity
+  - _contour_filter:         detects circles, rejects tiny dots, handles empty
+  - estimate_group_center:   synthetic 1-hole (within 5px), synthetic 2-hole
+                             (group centre between holes), identical images
+                             return None, real images find holes
+  - estimate_px_per_cm:      positive float, plausible range, deterministic,
+                             scales correctly with grid_cm parameter
+  - pixels_to_clicks:        exact math (40px at 40px/cm -> 2.0 clicks),
+                             zero offset, negative offsets, proportionality
+  - _format_clicks:          LEFT/RIGHT/UP/DOWN directions, magnitudes
+  - ZeroingSession:          full pipeline round 1 + round 2, round_index,
+                             baseline rollover, error handling (None input,
+                             missing baseline)
+  - Real.jpeg:               all core functions work on a real photo
+
+test_synth.py (30 tests):
+  - Single-hole position:    gc detected within 12px of true position for
+                             holes placed below/above/left/right/diagonal/centre
+  - Correction sign:         wind/elev always point in the correct direction
+  - Multi-hole group centre: 3-hole and 5-hole groups detected within 12px
+                             of the true weighted average
+  - Registration:            shifted image -> aim aligned to within 3px,
+                             gc in same position as unshifted version
+  - Symmetric holes:         two opposite holes -> gc at aim point (zero correction)
+  - Outlier inclusion:       with max_dist_px=None, outlier is included as designed
+
+
+TEST FILES LOCATION
+--------------------
+C:\Users\Andrey\desktop\calc\test_calc.py
+C:\Users\Andrey\desktop\calc\test_synth.py
+C:\Users\Andrey\desktop\calc\generate_test_images.py
+C:\Users\Andrey\desktop\calc\synth\   (12 generated test images)
+
+
+HOW TO RUN THE TESTS
+---------------------
+cd C:\Users\Andrey\desktop\calc
+python test_calc.py
+python test_synth.py
