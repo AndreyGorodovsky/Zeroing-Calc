@@ -17,7 +17,7 @@ import cv2 as cv
 # ── load notebook cell 3 ─────────────────────────────────────────────────────
 with open("C:/Users/Andrey/desktop/calc/Calc.ipynb", "r", encoding="utf-8") as f:
     nb = json.load(f)
-source = "".join(nb["cells"][2]["source"])
+source = "".join(nb["cells"][0]["source"])
 mod = types.ModuleType("calc")
 exec(compile(source, "Calc.ipynb[cell3]", "exec"), mod.__dict__)
 ZeroingSession      = mod.ZeroingSession

@@ -14,8 +14,7 @@ import json, types
 with open("C:/Users/Andrey/desktop/calc/Calc.ipynb", "r", encoding="utf-8") as f:
     nb = json.load(f)
 
-# Cell 3 is the latest version (cell 2 is an older draft)
-source = "".join(nb["cells"][2]["source"])
+source = "".join(nb["cells"][0]["source"])
 mod = types.ModuleType("calc")
 exec(compile(source, "Calc.ipynb[cell3]", "exec"), mod.__dict__)
 
