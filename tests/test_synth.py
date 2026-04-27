@@ -27,7 +27,7 @@ _register_to        = mod._register_to
 _to_gray_norm       = mod._to_gray_norm
 find_diamond_center = mod.find_diamond_center
 
-SYNTH = str(Path(__file__).resolve().parent / "images" / "synth") + "/"
+SYNTH = str(Path(__file__).resolve().parent.parent / "images" / "synth") + "/"
 CX, CY = 450, 600   # diamond centre in synthetic images
 
 passed = failed = 0

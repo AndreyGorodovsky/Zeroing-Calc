@@ -25,7 +25,7 @@ import numpy as np
 import os
 from pathlib import Path
 
-OUT = str(Path(__file__).resolve().parent / "images" / "synth_centers") + "/"
+OUT = str(Path(__file__).resolve().parent.parent / "images" / "synth_centers") + "/"
 os.makedirs(OUT, exist_ok=True)
 
 # ── constants ─────────────────────────────────────────────────────────────────
