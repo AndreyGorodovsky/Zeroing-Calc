@@ -13,9 +13,11 @@ Strategy:
 import sys, json, types, math
 import numpy as np
 import cv2 as cv
+from pathlib import Path
 
 # ── load notebook cell 3 ─────────────────────────────────────────────────────
-with open("C:/Users/Andrey/desktop/calc/Calc.ipynb", "r", encoding="utf-8") as f:
+REPO = Path(__file__).resolve().parent.parent
+with open(REPO / "Calc.ipynb", "r", encoding="utf-8") as f:
     nb = json.load(f)
 source = "".join(nb["cells"][0]["source"])
 mod = types.ModuleType("calc")
@@ -25,7 +27,7 @@ _register_to        = mod._register_to
 _to_gray_norm       = mod._to_gray_norm
 find_diamond_center = mod.find_diamond_center
 
-SYNTH = "C:/Users/Andrey/desktop/calc/images/synth/"
+SYNTH = str(Path(__file__).resolve().parent / "images" / "synth") + "/"
 CX, CY = 450, 600   # diamond centre in synthetic images
 
 passed = failed = 0

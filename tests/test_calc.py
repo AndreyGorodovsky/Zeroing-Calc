@@ -7,11 +7,13 @@ import sys
 import math
 import numpy as np
 import cv2 as cv
+from pathlib import Path
 
 # == load the source code from the notebook cell ==============================
 import json, types
 
-with open("C:/Users/Andrey/desktop/calc/Calc.ipynb", "r", encoding="utf-8") as f:
+REPO = Path(__file__).resolve().parent.parent
+with open(REPO / "Calc.ipynb", "r", encoding="utf-8") as f:
     nb = json.load(f)
 
 source = "".join(nb["cells"][0]["source"])
@@ -30,7 +32,7 @@ pixels_to_clicks                       = mod.pixels_to_clicks
 _format_clicks                         = mod._format_clicks
 ZeroingSession                         = mod.ZeroingSession
 
-BASE = "C:/Users/Andrey/desktop/calc/images/"
+BASE = str(REPO / "images") + "/"
 
 # == tiny test harness =========================================================
 passed = 0
@@ -383,7 +385,7 @@ print(f"{'='*52}\n")
 # clean up temp file
 import os
 try:
-    os.remove("C:/Users/Andrey/desktop/calc/extracted.py")
+    os.remove(REPO / "extracted.py")
 except Exception:
     pass
 

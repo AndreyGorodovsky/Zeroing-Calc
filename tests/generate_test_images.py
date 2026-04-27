@@ -15,8 +15,9 @@ so the expected click output can be calculated exactly.
 import cv2 as cv
 import numpy as np
 import os
+from pathlib import Path
 
-OUT = "C:/Users/Andrey/desktop/calc/images/synth/"
+OUT = str(Path(__file__).resolve().parent / "images" / "synth") + "/"
 os.makedirs(OUT, exist_ok=True)
 
 # ── constants ────────────────────────────────────────────────────────────────

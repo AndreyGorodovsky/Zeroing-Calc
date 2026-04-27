@@ -23,8 +23,9 @@ Expected clicks (50 m, 0.5 cm/click, 40 px/cm):
 import cv2 as cv
 import numpy as np
 import os
+from pathlib import Path
 
-OUT = "C:/Users/Andrey/Desktop/Calc/images/synth_centers/"
+OUT = str(Path(__file__).resolve().parent / "images" / "synth_centers") + "/"
 os.makedirs(OUT, exist_ok=True)
 
 # ── constants ─────────────────────────────────────────────────────────────────
