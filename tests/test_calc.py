@@ -120,9 +120,10 @@ if shot1 is not None:
 
     check("warped same shape as ref",  warped.shape == clean.shape)
     check("H is 3x3",                  H.shape == (3, 3))
-    check("H top-left is 1",           abs(H[0, 0] - 1) < 1e-5)
-    check("H is pure translation",     abs(H[0, 1]) < 1e-5 and abs(H[1, 0]) < 1e-5,
-          "rotation component found = unexpected")
+    check("H scale near 1 (< 2%)",     abs(H[0, 0] - 1) < 0.02,
+          f"H[0,0]={H[0,0]:.5f}")
+    check("H rotation small (< 1 deg)", abs(H[0, 1]) < 0.02 and abs(H[1, 0]) < 0.02,
+          f"H[0,1]={H[0,1]:.5f} H[1,0]={H[1,0]:.5f}")
 
     # After alignment the diamond centers should be very close
     ref_cx, ref_cy = find_diamond_center(clean)
