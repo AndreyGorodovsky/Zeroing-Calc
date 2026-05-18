@@ -12,7 +12,7 @@ __pycache__/
 Thumbs.db
 
 # Claude Code
-.claude/
+.claude/settings.local.json
 
 # Scratch / temp
 cell_source.txt
